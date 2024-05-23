@@ -1,1 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+a {
+    text-decoration: none;
+}
+
+.form h1 {
+    font-weight: 700;
+    color: #0039a6;
+}
+
+.form-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:89vh;
+}
+
+.form-card-component {
+    width: 400px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+mat-form-field {
+    width: 300px;
+    margin-top: 5px;
+}
+
+.change-options {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+    cursor: pointer;
+    justify-content: space-around;
+}
+
+.change-options a {
+    color: #0039a6;
+}
+
+.submit-btn {
+    margin-top: 5px;
+}

@@ -1,0 +1,29 @@
+<div class="form-area">
+    <div class="form-card-component">
+        <mat-card>
+            <form #loginform="ngForm" [formGroup]="loginForm" (ngSubmit)="submitForm()" class="form">
+                <h1>
+                    Login
+                </h1>
+
+                <mat-form-field>
+                    <mat-label>Email</mat-label>
+                    <input formControlName="email" type="email" matInput>
+                    <mat-error>Email is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input formControlName="password" type="password" matInput>
+                    <mat-error>Password is required</mat-error>
+                </mat-form-field>
+
+                <button class="submit-btn" type="submit" [disabled]="loginForm.invalid" mat-raised-button color="accent" appBlur>Submit</button>
+                <div class="change-options">
+                    <a routerLink="/signup">Click for Sign Up</a>
+                    <a routerLink="/forgot-password">Forgot Password?</a>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+</div>
