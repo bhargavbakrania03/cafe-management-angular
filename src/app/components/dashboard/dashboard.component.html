@@ -1,0 +1,72 @@
+<div class="dashboard">
+    <mat-toolbar>
+        <mat-toolbar-row>
+            <div class="navbar-container">
+                <div class="navbar-menu">
+                    <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+                    <span>Cafe Management System</span>
+                </div>
+                <div class="logout">
+                    <button class="btn-logout" (click)="userLogout()">Logout</button>
+                </div>
+            </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <mat-drawer-container class="sidenav-container" autosize>
+        <mat-drawer #sidenav class="sidebar-list" mode="side" opened="true">
+            <mat-nav-list>
+                <mat-list-item>
+                    <button mat-button>Dashboard</button>
+                </mat-list-item>
+                <mat-list-item>
+                    <button mat-button>Dashboard</button>
+                </mat-list-item>
+                <mat-list-item>
+                    <button mat-button>Dashboard</button>
+                </mat-list-item>
+                <mat-list-item>
+                    <button mat-button>Dashboard</button>
+                </mat-list-item>
+                <mat-list-item>
+                    <button mat-button>Dashboard</button>
+                </mat-list-item>
+            </mat-nav-list>
+        </mat-drawer>
+        <mat-drawer-content>
+            <div class="dashboard-container">
+                <mat-card class="dashboard-card">
+                    <mat-card-header>
+                        <mat-card-title>Orders</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <!-- Orders summary content -->
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="dashboard-card">
+                    <mat-card-header>
+                        <mat-card-title>Inventory</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <!-- Inventory summary content -->
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="dashboard-card">
+                    <mat-card-header>
+                        <mat-card-title>Employees</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <!-- Employees summary content -->
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="dashboard-card">
+                    <mat-card-header>
+                        <mat-card-title>Reports</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <!-- Reports summary content -->
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

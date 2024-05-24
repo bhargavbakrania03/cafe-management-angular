@@ -1,13 +1,13 @@
 <div class="container">
-    <nav class="navbar">
-
-        <mat-toolbar>
-            <mat-toolbar-row>
-                <span>Cafe Management System</span>
-            </mat-toolbar-row>
-        </mat-toolbar>
-
-    </nav>
+    <mat-toolbar *ngIf="!showTitlebar">
+        <mat-toolbar-row>
+            <div class="navbar-container">
+                <div class="navbar-menu">
+                    <span>Cafe Management System</span>
+                </div>
+            </div>
+        </mat-toolbar-row>
+    </mat-toolbar>
 
     <router-outlet></router-outlet>
 </div>

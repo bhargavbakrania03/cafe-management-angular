@@ -1,12 +1,12 @@
 export interface SignUp {
-    userName: string;
-    userEmail: string;
-    contactNo: string;
+    name: string;
+    email: string;
+    contactNumber: string;
     password: string;
 }
 
 export interface Login {
-    userEmail: string;
+    email: string;
     password: string;
 }
 
@@ -15,5 +15,5 @@ export interface ForgotPassword {
 }
 
 export interface ResetPassword {
-    newPassword: string;
+    new_password: string;
 }
