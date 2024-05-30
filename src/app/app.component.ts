@@ -1,27 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MaterialModule } from './material.module';
-import { UserService } from './shared/services/user.service';
+import { MaterialModule } from './shared/modules/material.module';
 import { CommonModule } from '@angular/common';
-import { CONSTANTS } from './utils/constants';
+import { HeaderComponent } from './layouts/header/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, MaterialModule, CommonModule],
+  imports: [RouterOutlet, MaterialModule, CommonModule, HeaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  showTitlebar = false;
 
-  constructor(private userService: UserService) {
-    if (localStorage.getItem(CONSTANTS.auth.AUTH_TOKEN)) {
-      this.showTitlebar = true;
-    }
-
-    this.userService.isLogged.subscribe(value => {
-      this.showTitlebar = value;
-    })
-  }
 }

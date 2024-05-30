@@ -1,7 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+// @use '@angular/material' as mat;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// $primary-color: mat.$purple-palette;
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 a {
     text-decoration: none;
@@ -16,7 +26,7 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    height:89vh;
+    height: 89vh;
 }
 
 .form-card-component {
@@ -50,4 +60,21 @@ mat-form-field {
 
 .submit-btn {
     margin-top: 5px;
+}
+
+.restrict-select {
+    user-select: none;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-inline-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }

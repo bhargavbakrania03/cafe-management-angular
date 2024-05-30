@@ -14,6 +14,15 @@ export interface ForgotPassword {
     email: string;
 }
 
+export interface ChangePassword {
+    old_password: string;
+    new_password: string;
+}
+
 export interface ResetPassword {
     new_password: string;
+}
+
+export interface TokenPayload {
+    role: string;
 }

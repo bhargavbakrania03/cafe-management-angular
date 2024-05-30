@@ -1,13 +1,4 @@
 <div class="container">
-    <mat-toolbar *ngIf="!showTitlebar">
-        <mat-toolbar-row>
-            <div class="navbar-container">
-                <div class="navbar-menu">
-                    <span>Cafe Management System</span>
-                </div>
-            </div>
-        </mat-toolbar-row>
-    </mat-toolbar>
-
+    <app-header></app-header>
     <router-outlet></router-outlet>
 </div>

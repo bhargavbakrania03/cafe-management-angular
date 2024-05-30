@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row fxLayout="row">
+        <span class="title-center">{{dialogData.action}} Category</span>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="categoryForm" class="flex-inline-center">
+        <div fxFlex fxLayout="column">
+            <mat-form-field fxFlex>
+                <mat-label>Category</mat-label>
+                <input id="category" formControlName="category" type="text" matInput required>
+                <mat-error
+                    *ngIf="categoryForm.controls.category.touched && categoryForm.controls.category.invalid">
+                    <span *ngIf="categoryForm.controls.category.errors.required">Category is mandatory
+                        field</span>
+                </mat-error>
+            </mat-form-field>            
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-raised-button color="primary" (click)="handleSubmit()" type="submit"
+        [disabled]="!(categoryForm.dirty && categoryForm.valid)">{{dialogAction}}</button>
+    <button mat-raised-button color="primary" mat-dialog-close>Close</button>
+</mat-dialog-actions>

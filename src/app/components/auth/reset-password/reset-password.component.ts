@@ -1,12 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
-import { MaterialModule } from '../../../material.module';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { MaterialModule } from '../../../shared/modules/material.module';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { BlurDirective } from '../../../shared/directives/blur.directive';
-import { UserService } from '../../../shared/services/user.service';
+import { BlurDirective } from '../../../core/directives/blur.directive';
+import { UserService } from '../../../core/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ResetPassword } from '../../../shared/models/auth.model';
+import { ResetPassword } from '../../../core/models/auth.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -21,7 +21,7 @@ export class ResetPasswordComponent {
   errorMessage: string = 'Some Unknown error occurred !'
   resetToken = this.currentRoute.snapshot.paramMap.get('token');
 
-  constructor(private fb: FormBuilder, private userService: UserService, private snackbar: MatSnackBar, private router: Router, private currentRoute: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private userService: UserService, private snackbar: MatSnackBar, private router: Router, private currentRoute: ActivatedRoute, private elRef: ElementRef) {
   }
 
   resetPasswordForm = this.fb.group({
@@ -53,6 +53,9 @@ export class ResetPasswordComponent {
               this.errorMessage = "Some error occurred from server side !"
               break;
           }
+
+          this.elRef.nativeElement.querySelector(`#new_password`).focus();
+
           this.snackbar.open(this.errorMessage, 'Close', {
             duration: 3000
           });

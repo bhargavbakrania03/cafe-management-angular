@@ -1,13 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserService } from '../../../shared/services/user.service';
-import { MaterialModule } from '../../../material.module';
+import { UserService } from '../../../core/services/user.service';
+import { MaterialModule } from '../../../shared/modules/material.module';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ForgotPassword } from '../../../shared/models/auth.model';
+import { ForgotPassword } from '../../../core/models/auth.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BlurDirective } from '../../../shared/directives/blur.directive';
+import { BlurDirective } from '../../../core/directives/blur.directive';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CONSTANTS } from '../../../utils/constants';
 
 @Component({
   selector: 'app-forgot-password',
@@ -24,9 +25,8 @@ export class ForgotPasswordComponent {
     email: new FormControl<string>('', [Validators.required, Validators.email])
   })
 
-  constructor(private fb: FormBuilder, private userService: UserService, private snackbar: MatSnackBar, private router: Router) {
+  constructor(private fb: FormBuilder, private userService: UserService, private snackbar: MatSnackBar, private elRef: ElementRef) {
   }
-
 
   submitForm() {
     if (this.forgotPasswordForm.valid) {
@@ -40,7 +40,7 @@ export class ForgotPasswordComponent {
             this.form.resetForm();
 
             setTimeout(() => {
-              this.router.navigate(['/login']);
+              this.userService.navigate(CONSTANTS.ROUTES.login);
             }, 3000);
           }
         },
@@ -54,6 +54,9 @@ export class ForgotPasswordComponent {
               this.errorMessage = "Some error occurred from server side !"
               break;
           }
+
+          this.elRef.nativeElement.querySelector('#email').focus();
+
           this.snackbar.open(this.errorMessage, 'Close', {
             duration: 3000
           });

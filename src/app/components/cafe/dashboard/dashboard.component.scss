@@ -1,3 +1,4 @@
+@import "../../../styles.scss";
 
 .dashboard {
   display: flex;
@@ -17,36 +18,48 @@
 }
 
 .sidebar-list {
-  width: 200px;
+  width: 250px;
+  padding: 10px;
 }
 
 .sidenav-container {
   height: 100%;
 }
 
-.navbar-container {
+mat-list-item {
+  @extend .restrict-select;
+}
+
+mat-list-item a {
+  color: black;
+  
+}
+
+mat-card-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  width: 100%;
+  flex-direction: column;
 }
 
-.navbar-menu {
+mat-card-title {
+  font-size: 24px;
+}
+
+.sidebar-item {
   display: flex;
   align-items: center;
 }
 
-.navbar-menu button {
-  margin-right: 10px;
+.sidebar-item p {
+  margin: 0;
+  margin-left: 10px;
 }
 
-.btn-logout {
-  background-color: #e60f00;
-  cursor: pointer;
-  font-weight: 700;
+.selected {
+  background-color: #ff3b66;
+}
+
+.selected .sidebar-item {
   color: white;
-  font-size: medium;
-  padding: 10px 20px;
-  border-radius: 15px;
-  border: 5px solid white;
 }
