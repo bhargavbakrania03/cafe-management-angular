@@ -1,0 +1,35 @@
+@import "../../../styles.scss";
+
+.sidenav-container {
+    height: 89%;
+}
+
+.sidebar-list {
+    width: 250px;
+    padding: 10px;
+}
+
+mat-list-item {
+    @extend .restrict-select;
+}
+
+mat-list-item a {
+    color: black;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-item p {
+    margin: 0 0 0 10px;
+}
+
+.selected {
+    background-color: #ff3b66;
+}
+
+.selected .sidebar-item {
+    color: white;
+}

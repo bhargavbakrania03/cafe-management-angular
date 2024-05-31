@@ -9,12 +9,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list'
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatMenuModule} from '@angular/material/menu';
-import { MatTableModule } from '@angular/material/table'  
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     exports: [
-        MatToolbarModule, MatCardModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatSidenavModule, MatListModule, MatIconModule, MatDialogModule, MatMenuModule, MatTableModule
+        MatToolbarModule, MatCardModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatSidenavModule, MatListModule, MatIconModule, MatDialogModule, MatMenuModule, MatTableModule, MatSlideToggleModule
     ]
 })
 export class MaterialModule { }

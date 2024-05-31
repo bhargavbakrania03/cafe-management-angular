@@ -11,7 +11,7 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  getProducts(){
+  getProducts() {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get(this.apiUrl + CONSTANTS.API_URL.PRODUCT.get_product, {
       headers
@@ -34,8 +34,13 @@ export class ProductService {
 
   deleteProduct(id: any) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.delete(this.apiUrl + CONSTANTS.API_URL.PRODUCT.update_product + id, {
+    return this.http.delete(this.apiUrl + CONSTANTS.API_URL.PRODUCT.delete_product + id, {
       headers
     });
+  }
+
+  updateStatus(data: any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    this.http.patch(this.apiUrl + CONSTANTS.API_URL.PRODUCT.update_status + data.id, data, { headers });
   }
 }

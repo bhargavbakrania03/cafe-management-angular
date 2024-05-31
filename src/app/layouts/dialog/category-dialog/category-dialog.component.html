@@ -7,15 +7,16 @@
 <mat-dialog-content class="mat-typography">
     <form [formGroup]="categoryForm" class="flex-inline-center">
         <div fxFlex fxLayout="column">
-            <mat-form-field fxFlex>
-                <mat-label>Category</mat-label>
-                <input id="category" formControlName="category" type="text" matInput required>
-                <mat-error
-                    *ngIf="categoryForm.controls.category.touched && categoryForm.controls.category.invalid">
-                    <span *ngIf="categoryForm.controls.category.errors.required">Category is mandatory
-                        field</span>
-                </mat-error>
-            </mat-form-field>            
+            <div fxLayout="row wrap">
+                <mat-form-field fxFlex>
+                    <mat-label>Category</mat-label>
+                    <input id="category" formControlName="category" type="text" matInput required>
+                    <mat-error *ngIf="categoryForm.controls.category.touched && categoryForm.controls.category.invalid">
+                        <span *ngIf="categoryForm.controls.category.errors.required">Category is mandatory
+                            field</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
         </div>
     </form>
 </mat-dialog-content>

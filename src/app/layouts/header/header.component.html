@@ -5,7 +5,7 @@
                 <button *ngIf="isLoggedIn" mat-icon-button (click)="toggleSidebar()"><mat-icon>menu</mat-icon></button>
                 <span>Cafe Management System</span>
             </div>
-            <div class="user-profile">
+            <div class="user-profile" *ngIf="isLoggedIn">
                 <button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
                     <mat-icon>account_circle</mat-icon>
                 </button>
@@ -17,7 +17,6 @@
                         <mat-icon>exit_to_app</mat-icon> Log Out
                     </button>
                 </mat-menu>
-                <!-- <button *ngIf="isLoggedIn" class="btn-logout" (click)="userLogout()">Logout</button> -->
             </div>
         </div>
     </mat-toolbar-row>

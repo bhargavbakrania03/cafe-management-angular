@@ -16,9 +16,13 @@ mat-form-field{
     padding-top: 15px;
 }
 
-// .center-mat mat-form-field{
-//     width: 30%;
-// }
+.center-mat mat-form-field{
+    width: 50%;
+}
+
+.manage-category {
+    padding: 20px;
+}
 
 mat-card b span {
     font-size: 24px;
@@ -34,4 +38,14 @@ hr {
 
 .category-container {
     padding: 20px;
+}
+
+.action-link {
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+}
+
+th, td {
+    text-align: center;
 }

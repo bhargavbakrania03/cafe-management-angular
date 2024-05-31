@@ -1,22 +1,23 @@
 <div class="category-container">
-    <mat-card>
-        <!-- <mat-card class="center-mat"> -->
+    <mat-card class="manage-category">
+        <b><span>Manage Category</span></b>
+        <button mat-flat-button color="primary" (click)="handleAddAction()">Add Category</button>
+    </mat-card>
+    <hr>
+    <mat-card class="center-mat">
         <mat-form-field appearance="fill">
-            <mat-label>Filter</mat-label>
+            <mat-label>Filter Category</mat-label>
             <input matInput (keyup)="applyFilter($event)" #input>
         </mat-form-field>
-        <b><span>Manage Category</span></b>
-        <!-- </mat-card> -->
-        <button mat-flat-button color="primary" (click)="handleAddAction()">Add Category</button>
     </mat-card>
     <hr>
     <div class="responsive_table">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-            <ng-container matColumnDef="name">
+            <ng-container matColumnDef="category">
                 <th mat-header-cell *matHeaderCellDef>Name</th>
                 <td mat-cell *matCellDef="let element">{{element.category}}</td>
             </ng-container>
-            <ng-container matColumnDef="edit">
+            <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let element" class="action-link">
                     <button mat-icon-button color="primary" matTooltip="Edit" (click)="handleEditAction(element)">

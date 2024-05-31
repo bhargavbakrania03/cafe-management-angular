@@ -5,7 +5,7 @@ import { UserService } from '../../core/services/user.service';
 import { CONSTANTS } from '../../utils/constants';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../dialog/confirmation-dialog/confirmation-dialog.component';
-import { ChangePasswordComponent } from '../../components/auth/change-password/change-password.component';
+import { ChangePasswordComponent } from '../../pages/cafe/change-password/change-password.component';
 
 @Component({
   selector: 'app-header',

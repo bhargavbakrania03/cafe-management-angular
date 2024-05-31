@@ -22,7 +22,8 @@ export class CategoryDialogComponent implements OnInit{
   dialogAction: string = 'Add';
   responseMessage: string = '';
 
-  constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any, private fb: FormBuilder, private categoryService: CategoryService, private dialogRef: MatDialogRef<CategoryDialogComponent>, private snackbar: MatSnackBar){}
+  constructor(@Inject(MAT_DIALOG_DATA) public dialogData: any, private fb: FormBuilder, private categoryService: CategoryService, private dialogRef: MatDialogRef<CategoryDialogComponent>, private snackbar: MatSnackBar){
+  }
 
   ngOnInit(): void {
     this.categoryForm = this.fb.group({

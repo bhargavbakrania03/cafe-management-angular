@@ -17,13 +17,9 @@ import { UserService } from '../../../core/services/user.service';
 export class DashboardComponent {
   data: any;
   errorResponse: any;
-  @ViewChild('sidenav') sidenav: any;
 
   constructor(private dashboardService: DashboardService, private snackbar: MatSnackBar, public menuItems: MenuItems, private userService: UserService) {
     this.userService.isAuthenticated() && this.dashboardData();
-    this.userService.toggleSidebar.subscribe(value => {
-      this.sidenav.toggle();
-    })
   }
 
   dashboardData() {

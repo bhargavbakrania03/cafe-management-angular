@@ -24,6 +24,7 @@ export const CONSTANTS = {
             get_product: 'product/allproduct',
             update_product: 'product/update/',
             delete_product: 'product/delete/',
+            update_status: 'product/verify/',
         }
     },
     ERROR: {

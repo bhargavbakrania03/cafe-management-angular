@@ -1,0 +1,51 @@
+@import "../../../../styles.scss";
+
+mat-card {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding:  0 25px;
+}
+
+.center-mat {
+    @extend .flex-center;
+    padding-bottom: 0;
+}
+
+mat-form-field{
+    padding-top: 15px;
+}
+
+.center-mat mat-form-field{
+    width: 50%;
+}
+
+.manage-product {
+    padding: 20px;
+}
+
+mat-card b span {
+    font-size: 24px;
+}
+
+table {
+    width: 100%;
+}
+
+hr {
+    visibility: hidden;
+}
+
+.product-container {
+    padding: 20px;
+}
+
+.action-link {
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+}
+
+th, td {
+    text-align: center;
+}

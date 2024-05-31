@@ -17,11 +17,11 @@ import { CategoryDialogComponent } from '../../../layouts/dialog/category-dialog
   styleUrl: './manage-category.component.scss'
 })
 export class ManageCategoryComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'edit'];
+  displayedColumns: string[] = ['category', 'action'];
   dataSource: any;
   responseMessage: string = '';
 
-  constructor(private categoryService: CategoryService, private dialog: MatDialog, private snackbar: MatSnackBar, private router: Router) { }
+  constructor(private categoryService: CategoryService, private dialog: MatDialog, private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.tableData();
@@ -30,7 +30,6 @@ export class ManageCategoryComponent implements OnInit {
   tableData() {
     this.categoryService.getCategory().subscribe({
       next: (response: any) => {
-        console.log(response);
         this.dataSource = new MatTableDataSource(response);
       },
       error: (error: any) => {
