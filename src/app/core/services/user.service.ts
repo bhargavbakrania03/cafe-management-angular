@@ -17,9 +17,8 @@ export class UserService {
   constructor(private http: HttpClient, private router: Router) { }
 
   signUp(userData: SignUp) {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(this.url + CONSTANTS.API_URL.AUTH.sign_up, userData, {
-      headers
+      headers: CONSTANTS.HEADERS.content_json
     });
   }
 
@@ -41,7 +40,6 @@ export class UserService {
   logout() {
     localStorage.removeItem(CONSTANTS.AUTH_TOKEN);
     this.isLogged.next(false);
-    this.router.navigate(['/login']);
     this.navigate(CONSTANTS.ROUTES.login);
   }
 
@@ -57,16 +55,14 @@ export class UserService {
   }
 
   changePassword(userData: ChangePassword) {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.patch(this.url + CONSTANTS.API_URL.AUTH.change_password, userData, {
-      headers
+      headers: CONSTANTS.HEADERS.content_json
     });
   }
 
   checkResetToken(token: string) {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get<{ message: boolean }>(this.url + CONSTANTS.API_URL.RESET_PASSWORD.check_token + token, {
-      headers
+      headers: CONSTANTS.HEADERS.content_json
     });
   }
 
@@ -80,5 +76,15 @@ export class UserService {
 
   navigate(route: string) {
     this.router.navigate([route]);
+  }
+
+  getUsers() {
+    return this.http.get(this.url + CONSTANTS.API_URL.USER.get_user);
+  }
+
+  updateUser(data: any) {
+    return this.http.patch(this.url + CONSTANTS.API_URL.USER.update_user + data.id, data, {
+      headers: CONSTANTS.HEADERS.content_json
+    });
   }
 }

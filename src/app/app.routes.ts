@@ -40,6 +40,27 @@ export const routes: Routes = [
                     expectedRole: ['admin']
                 }
             },
+            {
+                path: 'order', canActivate: [AuthGuard],
+                loadComponent: () => import('./pages/cafe/manage-order/manage-order.component').then(m => m.ManageOrderComponent),
+                data: {
+                    expectedRole: ['admin', 'user']
+                }
+            },
+            {
+                path: 'bill', canActivate: [AuthGuard],
+                loadComponent: () => import('./pages/cafe/view-bill/view-bill.component').then(m => m.ViewBillComponent),
+                data: {
+                    expectedRole: ['admin']
+                }
+            },
+            {
+                path: 'user', canActivate: [AuthGuard],
+                loadComponent: () => import('./pages/cafe/manage-user/manage-user.component').then(m => m.ManageUserComponent),
+                data: {
+                    expectedRole: ['admin']
+                }
+            },
         ]
     },
     { path: 'reset-password/:token', canActivate: [ResetAuthGuard], component: ResetPasswordComponent },

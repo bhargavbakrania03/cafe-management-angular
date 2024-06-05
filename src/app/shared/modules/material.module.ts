@@ -12,10 +12,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
     exports: [
-        MatToolbarModule, MatCardModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatSidenavModule, MatListModule, MatIconModule, MatDialogModule, MatMenuModule, MatTableModule, MatSlideToggleModule
+        MatToolbarModule, MatCardModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatButtonModule, MatSidenavModule, MatListModule, MatIconModule, MatDialogModule, MatMenuModule, MatTableModule, MatSlideToggleModule, MatTooltipModule
     ]
 })
 export class MaterialModule { }

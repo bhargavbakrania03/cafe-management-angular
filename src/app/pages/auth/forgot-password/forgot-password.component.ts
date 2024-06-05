@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../core/services/user.service';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { Router, RouterLink } from '@angular/router';
@@ -19,13 +19,14 @@ import { CONSTANTS } from '../../../utils/constants';
 })
 export class ForgotPasswordComponent {
   @ViewChild('forgotForm') form: any;
-  errorMessage: string = 'Some Unknown error occurred !'
+  errorMessage: string = 'Some Unknown error occurred !';
+  forgotPasswordForm: any = FormGroup;
 
-  forgotPasswordForm = this.fb.group({
-    email: new FormControl<string>('', [Validators.required, Validators.email])
-  })
 
   constructor(private fb: FormBuilder, private userService: UserService, private snackbar: MatSnackBar, private elRef: ElementRef) {
+    this.forgotPasswordForm = this.fb.group({
+      email: new FormControl('', [Validators.required, Validators.pattern(CONSTANTS.REGEX.email_regex)]),
+    })
   }
 
   submitForm() {

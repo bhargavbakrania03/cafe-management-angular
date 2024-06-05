@@ -26,7 +26,6 @@ export class DashboardComponent {
     this.dashboardService.getDetails().subscribe({
       next: (response) => {
         this.data = response;
-        console.log(response)
       }, error: (error) => {
         if (error.error.message) {
           this.errorResponse = error.error.message;

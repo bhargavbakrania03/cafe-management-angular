@@ -1,4 +1,12 @@
+import { HttpHeaders } from "@angular/common/http";
+
 export const CONSTANTS = {
+    REGEX: {
+        name_regex: '[a-zA-Z ]*',
+        email_regex: '[a-zA-Z0-9_.-]+@[A-Za-z0-0-9_.-]+\.[a-z]{2,3}',
+        contact_number_regex: '^[0-9]{10,10}$',
+        password_regex: '[a-zA-Z0-9!@#$_]{8,20}',
+    },
     AUTH_TOKEN: 'CURRENT_TOKEN',
     API_URL: {
         AUTH: {
@@ -25,14 +33,32 @@ export const CONSTANTS = {
             update_product: 'product/update/',
             delete_product: 'product/delete/',
             update_status: 'product/verify/',
+            get_product_by_id: 'product/',
+        },
+        BILL: {
+            generate_report: 'bill/generatereport',
+            get_pdf: 'bill/getPdf/',
+            get_bills: 'bill/allbills',
+            delete_bill: 'bill/deletebill/',
+        },
+        USER: {
+            get_user: 'user/alluser',
+            update_user: 'user/verify/',
         }
     },
     ERROR: {
         auth_error: 'You are not authorized to access this page !',
         generic_error: 'Some Unknown error occured !',
+        product_exists: 'Product already exists !',
+    },
+    MESSAGE: {
+        product_added: 'Product Added Successfully',
     },
     ROUTES: {
         dashboard: '/cafe/dashboard',
         login: '/login',
+    },
+    HEADERS: {
+        content_json: new HttpHeaders({ 'Content-Type': 'application/json' }),
     }
 }

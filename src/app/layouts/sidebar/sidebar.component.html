@@ -1,12 +1,16 @@
 <mat-drawer-container class="sidenav-container" autosize *ngIf="isLoggedIn">
     <mat-drawer #sidenav class="sidebar-list" mode="side" opened>
         <mat-nav-list>
-            <a mat-list-item *ngFor="let item of menuItems.getMenuItem()" [routerLink]="['/cafe/', item.state]" routerLinkActive="selected">
-                <div class="sidebar-item" *ngIf="item.role==='' || item.role === tokenPayload.role">
-                    <mat-icon>{{item.icon}}</mat-icon>
-                    <p>{{item.name}}</p>
-                </div>
+            @for (item of menuItems.getMenuItem(); track $index) {
+            <a [routerLink]="['/cafe', item.state]" *ngIf="item.role==='' || item.role === tokenPayload.role">
+                <mat-list-item routerLinkActive="selected">
+                    <div class="sidebar-item">
+                        <mat-icon>{{item.icon}}</mat-icon>
+                        <p>{{item.name}}</p>
+                    </div>
+                </mat-list-item>
             </a>
+            }
         </mat-nav-list>
     </mat-drawer>
     <mat-drawer-content>

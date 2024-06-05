@@ -1,0 +1,49 @@
+mat-form-field {
+    padding: 5px;
+    display: inline-flex;
+}
+
+mat-card b span {
+    font-size: 16px;
+}
+
+.float-right {
+    float: right;
+}
+
+table {
+    width: 100%;
+}
+
+hr {
+    visibility: hidden;
+}
+
+mat-card {
+    padding: 20px;
+}
+
+.manage-order {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.manage-order b span {
+    font-size: 24px;
+}
+
+.action-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+th,
+td {
+    text-align: center;
+}
+
+.order-container {
+    padding: 20px;
+}

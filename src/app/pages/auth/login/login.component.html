@@ -9,19 +9,30 @@
                 <mat-form-field>
                     <mat-label>Email</mat-label>
                     <input id="email" formControlName="email" type="email" matInput>
-                    <mat-error>Email is required</mat-error>
+                    <mat-error *ngIf="loginForm.controls.email.touched && loginForm.controls.email.invalid">
+                        <span *ngIf="loginForm.controls.email.errors.required">Email
+                            is required</span>
+                        <span *ngIf="loginForm.controls.email.errors.pattern">Email
+                            is invalid</span>
+                    </mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
                     <mat-label>Password</mat-label>
                     <input id="password" formControlName="password" type="password" matInput>
-                    <mat-error>Password is required</mat-error>
+                    <mat-error *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">
+                        <span *ngIf="loginForm.controls.password.errors.required">Password
+                            is required</span>
+                        <span *ngIf="loginForm.controls.password.errors.pattern">Password
+                            should be 8-20 characters long and only contain !,&commat;,#,$,_ special characters</span>
+                    </mat-error>
                 </mat-form-field>
 
-                <button class="submit-btn" type="submit" [disabled]="loginForm.invalid" mat-raised-button color="accent" appBlur>Submit</button>
+                <button class="submit-btn" type="submit" [disabled]="loginForm.invalid" mat-raised-button color="accent"
+                    appBlur>Submit</button>
                 <div class="change-options">
-                    <a routerLink="/signup">Don't have an account? Sign Up</a>
-                    <a routerLink="/forgot-password">Forgot Password?</a>
+                    <a routerLink="/signup">Sign Up</a>
+                    <a routerLink="/forgot-password">Forgot Password</a>
                 </div>
             </form>
         </mat-card>

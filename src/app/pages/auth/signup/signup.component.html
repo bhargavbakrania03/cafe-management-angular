@@ -9,32 +9,52 @@
                 <mat-form-field>
                     <mat-label>Name</mat-label>
                     <input id="name" formControlName="name" type="text" matInput>
-                    <mat-error>Name is required</mat-error>
+                    <mat-error *ngIf="signupForm.controls.name.touched && signupForm.controls.name.invalid">
+                        <span *ngIf="signupForm.controls.name.errors.required">Name
+                            is required</span>
+                        <span *ngIf="signupForm.controls.name.errors.pattern">Name
+                            is invalid</span>
+                    </mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
                     <mat-label>Contact No.</mat-label>
                     <input id="contactNumber" formControlName="contactNumber" type="tel" matInput>
-                    <mat-error>Contact No. is required</mat-error>
+                    <mat-error
+                        *ngIf="signupForm.controls.contactNumber.touched && signupForm.controls.contactNumber.invalid">
+                        <span *ngIf="signupForm.controls.contactNumber.errors.required">Contact Number
+                            is required</span>
+                        <span *ngIf="signupForm.controls.contactNumber.errors.pattern">Contact Number
+                            is invalid</span>
+                    </mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
                     <mat-label>Email</mat-label>
                     <input id="email" formControlName="email" type="email" matInput>
-                    <mat-error>Email is required</mat-error>
+                    <mat-error *ngIf="signupForm.controls.email.touched && signupForm.controls.email.invalid"><span
+                            *ngIf="signupForm.controls.email.errors.required">Email
+                            is required</span>
+                        <span *ngIf="signupForm.controls.email.errors.pattern">Email
+                            is invalid</span></mat-error>
                 </mat-form-field>
 
                 <mat-form-field>
                     <mat-label>Password</mat-label>
                     <input id="password" formControlName="password" type="password" matInput>
-                    <mat-error>Password is required</mat-error>
+                    <mat-error *ngIf="signupForm.controls.password.touched && signupForm.controls.password.invalid">
+                        <span *ngIf="signupForm.controls.password.errors.required">Password
+                            is required</span>
+                        <span *ngIf="signupForm.controls.password.errors.pattern">Password
+                            should be 8-20 characters long and only contain !,&commat;,#,$,_ special characters</span>
+                    </mat-error>
                 </mat-form-field>
 
-                <button class="submit-btn" type="submit" [disabled]="signupForm.invalid" mat-raised-button color="accent"
-                    appBlur>Submit</button>
+                <button class="submit-btn" type="submit" [disabled]="signupForm.invalid" mat-raised-button
+                    color="accent" appBlur>Submit</button>
                 <div class="change-options">
-                    <a routerLink="/login">Already have an account? Login</a>
-                    <a routerLink="/forgot-password">Forgot Password?</a>
+                    <a routerLink="/login">Login</a>
+                    <a routerLink="/forgot-password">Forgot Password</a>
                 </div>
             </form>
         </mat-card>

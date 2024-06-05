@@ -1,35 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../../core/services/product.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { BillService } from '../../../core/services/bill.service';
+import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CONSTANTS } from '../../../utils/constants';
-import { ProductDialogComponent } from '../../../layouts/dialog/product-dialog/product-dialog.component';
+import { ViewBillProductsComponent } from '../../../layouts/dialog/view-bill-products/view-bill-products.component';
 import { ConfirmationDialogComponent } from '../../../layouts/dialog/confirmation-dialog/confirmation-dialog.component';
+import saveAs from 'file-saver';
 
 @Component({
-  selector: 'app-manage-product',
+  selector: 'app-view-bill',
   standalone: true,
   imports: [MaterialModule],
-  templateUrl: './manage-product.component.html',
-  styleUrl: './manage-product.component.scss'
+  templateUrl: './view-bill.component.html',
+  styleUrl: './view-bill.component.scss'
 })
-export class ManageProductComponent implements OnInit {
-  displayedColumns: string[] = ['product', 'categoryName', 'description', 'price', 'action'];
+export class ViewBillComponent implements OnInit {
+  displayedColumns: string[] = ['name', 'email', 'contactNumber', 'paymentMethod', 'total', 'view'];
   dataSource: any;
   responseMessage: string = '';
 
-  constructor(private productService: ProductService, private dialog: MatDialog, private snackbar: MatSnackBar
-  ) { }
+  constructor(private billService: BillService, private dialog: MatDialog, private snackbar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
     this.tableData();
   }
 
   tableData() {
-    this.productService.getProducts().subscribe({
+    this.billService.getBills().subscribe({
       next: (response: any) => {
         this.dataSource = new MatTableDataSource(response);
         console.log(response)
@@ -56,54 +57,51 @@ export class ManageProductComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  handleAddAction() {
+  handleViewAction(values: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      action: 'Add',
+      data: values,
     }
-    dialogConfig.width = '850px';
-    const dialogRef = this.dialog.open(ProductDialogComponent, dialogConfig);
-    dialogRef.componentInstance.onAddProduct.subscribe(
-      (response) => {
-        this.tableData();
-      }
-    )
+    dialogConfig.width = '100%';
+    const dialogRef = this.dialog.open(ViewBillProductsComponent, dialogConfig);
   }
 
-  handleEditAction(data: any) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      action: 'Edit',
-      data
+  downloadReportAction(values: any) {
+    let data = {
+      name: values.name,
+      email: values.email,
+      uuid: values.uuid,
+      contactNumber: values.contactNumber,
+      paymentMethod: values.paymentMethod,
+      totalAmount: values.total,
+      productDetails: values.productDetails,
     }
-    dialogConfig.width = '850px';
-    const dialogRef = this.dialog.open(ProductDialogComponent, dialogConfig);
-    dialogRef.componentInstance.onEditProduct.subscribe(
-      (response) => {
-        this.tableData();
+    this.billService.getPDF(data).subscribe({
+      next: (response: any) => {
+        saveAs(response, values.uuid + '.pdf');
       }
-    )
+    })
   }
 
-  handleDeleteAction(data: any) {
+  handleDeleteAction(values: any) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      message: 'Delete ' + data.name,
+      message: 'Delete ' + values.name,
     }
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
     dialogRef.componentInstance.onEmitStatusChange.subscribe(
       (response) => {
-        this.deleteProduct(data.id);
+        this.deleteProduct(values.id);
         dialogRef.close();
       }
     )
   }
 
   deleteProduct(id: any) {
-    this.productService.deleteProduct(id).subscribe({
+    this.billService.delete(id).subscribe({
       next: (response: any) => {
         this.tableData();
-        this.responseMessage = response.message;
+        this.responseMessage = response?.message;
         this.snackbar.open(this.responseMessage, 'Close', {
           duration: 5000
         })
@@ -121,32 +119,5 @@ export class ManageProductComponent implements OnInit {
         })
       }
     })
-  }
-
-  onChange(status: any, id: any) {
-    const data = {
-      status: status.toString(),
-      id: id
-    }
-    this.productService.updateProduct(data).subscribe({
-      next: (response: any) => {
-        this.responseMessage = response.message;
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000
-        })
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.error.error) {
-          this.responseMessage = error.error.error;
-        }
-        else {
-          this.responseMessage = CONSTANTS.ERROR.generic_error;
-        }
-
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000
-        })
-      }
-    });
   }
 }

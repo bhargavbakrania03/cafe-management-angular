@@ -12,13 +12,11 @@ export class CategoryService {
   constructor(private http: HttpClient) { }
 
   add(data: any) {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(this.url + CONSTANTS.API_URL.CATEGORY.add_category, data, { headers });
+    return this.http.post(this.url + CONSTANTS.API_URL.CATEGORY.add_category, data, { headers: CONSTANTS.HEADERS.content_json });
   }
 
   update(data: any) {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.patch(this.url + CONSTANTS.API_URL.CATEGORY.update_category + data.id, data, { headers });
+    return this.http.patch(this.url + CONSTANTS.API_URL.CATEGORY.update_category + data.id, data, { headers: CONSTANTS.HEADERS.content_json });
   }
 
   getCategory() {

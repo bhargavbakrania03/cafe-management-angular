@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -8,6 +8,7 @@ import { SignUp } from '../../../core/models/auth.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BlurDirective } from '../../../core/directives/blur.directive';
 import { HttpErrorResponse } from '@angular/common/http';
+import { CONSTANTS } from '../../../utils/constants';
 
 @Component({
   selector: 'app-signup',
@@ -19,15 +20,17 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class SignupComponent {
   @ViewChild('signupform') formRef!: NgForm;
   errorMessage: string = 'Some Unknown error occurred !';
+  signupForm: any = FormGroup;
 
-  constructor(private fb: FormBuilder, private userService: UserService, private snackbar: MatSnackBar, private router: Router) { }
+  constructor(private fb: FormBuilder, private userService: UserService, private snackbar: MatSnackBar, private router: Router) {
+    this.signupForm = this.fb.group({
+      name: new FormControl('', [Validators.required, Validators.pattern(CONSTANTS.REGEX.name_regex)]),
+      contactNumber: new FormControl('', [Validators.required, Validators.email, Validators.pattern(CONSTANTS.REGEX.contact_number_regex)]),
+      email: new FormControl('', [Validators.required, Validators.pattern(CONSTANTS.REGEX.email_regex)]),
+      password: new FormControl('', [Validators.required, Validators.pattern(CONSTANTS.REGEX.password_regex)]),
+    })
+  }
 
-  signupForm = this.fb.group({
-    name: new FormControl('', [Validators.required]),
-    contactNumber: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
-  })
 
   submitForm() {
     if (this.signupForm.valid) {

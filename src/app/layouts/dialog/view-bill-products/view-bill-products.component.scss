@@ -1,0 +1,27 @@
+mat-toolbar-row {
+    justify-content: space-between;
+}
+
+#customers {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+
+    td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: start;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+}
+
+th, td {
+    text-align: center;
+}
