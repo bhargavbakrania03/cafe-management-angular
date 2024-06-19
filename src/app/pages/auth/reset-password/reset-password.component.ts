@@ -8,6 +8,9 @@ import { UserService } from '../../../core/services/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ResetPassword } from '../../../core/models/auth.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import { AuthFeature } from '../store/auth.reducer';
+import * as AuthActions from '../store/auth.actions';
 
 @Component({
   selector: 'app-reset-password',
@@ -21,7 +24,7 @@ export class ResetPasswordComponent {
   errorMessage: string = 'Some Unknown error occurred !'
   resetToken = this.currentRoute.snapshot.paramMap.get('token');
 
-  constructor(private fb: FormBuilder, private userService: UserService, private snackbar: MatSnackBar, private router: Router, private currentRoute: ActivatedRoute, private elRef: ElementRef) {
+  constructor(private fb: FormBuilder, private userService: UserService, private currentRoute: ActivatedRoute, private elRef: ElementRef, private store: Store) {
   }
 
   resetPasswordForm = this.fb.group({
@@ -30,38 +33,54 @@ export class ResetPasswordComponent {
 
   submitForm() {
     if (this.resetPasswordForm.valid) {
-      this.userService.resetPassword(<ResetPassword>this.resetPasswordForm.value, this.resetToken!).subscribe({
-        next: (response) => {
-          console.log(response);
-          if (response) {
-            this.snackbar.open('Your Password has been changed successfully', 'Close', {
-              duration: 3000
-            });
+      this.store.dispatch(AuthActions.ResetPasswordStart({ resetPasswordData: <ResetPassword>this.resetPasswordForm.value, resetToken: this.resetToken! }))
 
-            setTimeout(() => {
-              this.router.navigate(['/login']);
-            }, 3000);
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          console.log(error);
-          switch (error.status) {
-            case 401:
-              error.error.error && (this.errorMessage = error.error.error);
-              break;
-            case 500:
-              this.errorMessage = "Some error occurred from server side !"
-              break;
-          }
-
-          this.elRef.nativeElement.querySelector(`#new_password`).focus();
-
-          this.snackbar.open(this.errorMessage, 'Close', {
-            duration: 3000
-          });
+      this.store.select(AuthFeature.selectMessage).subscribe(response => {
+        if (response !== null) {
+          this.form.resetForm();
+          this.userService.navigate('/login')
         }
       })
-      this.form.resetForm();
+
+      this.store.select(AuthFeature.selectErrorMessage).subscribe(response => {
+        console.log(response)
+        if (response !== '') {
+          this.elRef.nativeElement.querySelector(`#new_password`).focus();
+        }
+      })
+
+      // this.userService.resetPassword(<ResetPassword>this.resetPasswordForm.value, this.resetToken!).subscribe({
+      //   next: (response) => {
+      //     console.log(response);
+      //     if (response) {
+      //       this.snackbar.open('Your Password has been changed successfully', 'Close', {
+      //         duration: 3000
+      //       });
+
+      //       setTimeout(() => {
+      //         this.router.navigate(['/login']);
+      //       }, 3000);
+      //     }
+      //   },
+      //   error: (error: HttpErrorResponse) => {
+      //     console.log(error);
+      //     switch (error.status) {
+      //       case 401:
+      //         error.error.error && (this.errorMessage = error.error.error);
+      //         break;
+      //       case 500:
+      //         this.errorMessage = "Some error occurred from server side !"
+      //         break;
+      //     }
+
+      //     this.elRef.nativeElement.querySelector(`#new_password`).focus();
+
+      //     this.snackbar.open(this.errorMessage, 'Close', {
+      //       duration: 3000
+      //     });
+      //   }
+      // })
+      // this.form.resetForm();
     }
   }
 }

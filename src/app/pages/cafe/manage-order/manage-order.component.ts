@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProductService } from '../../../core/services/product.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { CategoryService } from '../../../core/services/category.service';
 import { BillService } from '../../../core/services/bill.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { CONSTANTS } from '../../../utils/constants';
 import { saveAs } from 'file-saver';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { Store } from '@ngrx/store';
+import { CafeFeature } from '../store/cafe.reducer';
+import * as ProductActions from '../store/actions/product.actions';
+import * as BillActions from '../store/actions/bill.actions';
+import { SnackbarService } from '../../../core/services/snackbar.service';
 
 @Component({
   selector: 'app-manage-order',
@@ -22,14 +25,15 @@ export class ManageOrderComponent implements OnInit {
   displayedColumns: string[] = ['name', 'category', 'quantity', 'price', 'total', 'action'];
   dataSource: any = [];
   responseMessage: string = '';
+  disableInputs: boolean = false;
 
   manageOrderForm: any = FormGroup;
   categories: any = []
   products: any = []
-  price: any;
+  price: number = 0;
   totalAmount: number = 0;
 
-  constructor(private fb: FormBuilder, private productService: ProductService, private categoryService: CategoryService, private billService: BillService, private snackbar: MatSnackBar) { }
+  constructor(private fb: FormBuilder, private productService: ProductService, private categoryService: CategoryService, private billService: BillService, private snackbarService: SnackbarService, private store: Store) { }
 
   ngOnInit(): void {
     this.getCategories();
@@ -47,76 +51,117 @@ export class ManageOrderComponent implements OnInit {
   }
 
   getCategories() {
-    this.categoryService.getCategory().subscribe({
-      next: (response: any) => {
-        this.categories = response;
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.error.message) {
-          this.responseMessage = error.error.message;
-        }
-        else if (error.error.error) {
-          this.responseMessage = error.error.error;
-        }
-        else {
-          this.responseMessage = CONSTANTS.ERROR.generic_error;
-        }
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000,
-        });
-      }
+    this.store.select(CafeFeature.selectCategory).subscribe(category => {
+      this.categories = category;
     })
+
+    // this.categoryService.getCategory().subscribe({
+    //   next: (response: any) => {
+    //     this.categories = response;
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     if (error.error.message) {
+    //       this.responseMessage = error.error.message;
+    //     }
+    //     else if (error.error.error) {
+    //       this.responseMessage = error.error.error;
+    //     }
+    //     else {
+    //       this.responseMessage = CONSTANTS.ERROR.generic_error;
+    //     }
+    //     this.snackbarService.openSnackbar(this.responseMessage, 'Close', {
+    //       duration: 5000,
+    //     });
+    //   }
+    // })
   }
 
   getProductsByCategory(value: any) {
-    this.productService.getProductByCategory(value.category).subscribe({
-      next: (response: any) => {
+    this.store.dispatch(ProductActions.GetProductByCategory({ category: value.category }))
+
+    this.manageOrderForm.controls['product'].setValue('');
+    this.manageOrderForm.controls['price'].setValue('');
+    this.manageOrderForm.controls['quantity'].setValue('');
+    this.manageOrderForm.controls['total'].setValue(0);
+
+    this.store.select(CafeFeature.selectProductsByCategory).subscribe(response => {
+      if (response.length !== 0) {
+        if (this.disableInputs) {
+          this.manageOrderForm.controls['product'].enable();
+          this.manageOrderForm.controls['price'].enable();
+          this.manageOrderForm.controls['quantity'].enable();
+          this.manageOrderForm.controls['total'].enable();
+          this.disableInputs = false;
+        }
         this.products = response;
-        console.log(response);
-        this.manageOrderForm.controls['price'].setValue('');
-        this.manageOrderForm.controls['quantity'].setValue('');
-        this.manageOrderForm.controls['total'].setValue(0);
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.error.message) {
-          this.responseMessage = error.error.message;
-        }
-        else if (error.error.error) {
-          this.responseMessage = error.error.error;
-        }
-        else {
-          this.responseMessage = CONSTANTS.ERROR.generic_error;
-        }
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000,
-        });
+      }
+      else {
+        this.disableInputs = true;
+        this.manageOrderForm.controls['product'].disable();
+        this.manageOrderForm.controls['price'].disable();
+        this.manageOrderForm.controls['quantity'].disable();
+        this.manageOrderForm.controls['total'].disable();
+        this.snackbarService.openSnackbar('Sorry! Currently We do not have any products in this category')
       }
     })
+
+    // this.productService.getProductByCategory(value.category).subscribe({
+    //   next: (response: any) => {
+    //     this.products = response;
+    //     console.log(response);
+    //     this.manageOrderForm.controls['price'].setValue('');
+    //     this.manageOrderForm.controls['quantity'].setValue('');
+    //     this.manageOrderForm.controls['total'].setValue(0);
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     if (error.error.message) {
+    //       this.responseMessage = error.error.message;
+    //     }
+    //     else if (error.error.error) {
+    //       this.responseMessage = error.error.error;
+    //     }
+    //     else {
+    //       this.responseMessage = CONSTANTS.ERROR.generic_error;
+    //     }
+    //     this.snackbarService.openSnackbar(this.responseMessage, 'Close', {
+    //       duration: 5000,
+    //     });
+    //   }
+    // })
   }
 
   getProductDetails(value: any) {
-    this.productService.getProductById(value.id).subscribe({
-      next: (response: any) => {
-        this.price = response.price;
-        this.manageOrderForm.controls['price'].setValue(response.price);
-        this.manageOrderForm.controls['quantity'].setValue('1');
-        this.manageOrderForm.controls['total'].setValue(this.price * 1);
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.error.message) {
-          this.responseMessage = error.error.message;
-        }
-        else if (error.error.error) {
-          this.responseMessage = error.error.error;
-        }
-        else {
-          this.responseMessage = CONSTANTS.ERROR.generic_error;
-        }
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000,
-        });
-      }
+    this.store.dispatch(ProductActions.GetProductById({ id: value.id }))
+
+    this.store.select(CafeFeature.selectProductsById).subscribe(response => {
+      this.price = response.price!;
+      this.manageOrderForm.controls['price'].setValue(response.price);
+      this.manageOrderForm.controls['quantity'].setValue('1');
+      this.manageOrderForm.controls['total'].setValue(this.price * 1);
     })
+
+    // this.productService.getProductById(value.id).subscribe({
+    //   next: (response: any) => {
+    //     this.price = response.price;
+    //     this.manageOrderForm.controls['price'].setValue(response.price);
+    //     this.manageOrderForm.controls['quantity'].setValue('1');
+    //     this.manageOrderForm.controls['total'].setValue(this.price * 1);
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     if (error.error.message) {
+    //       this.responseMessage = error.error.message;
+    //     }
+    //     else if (error.error.error) {
+    //       this.responseMessage = error.error.error;
+    //     }
+    //     else {
+    //       this.responseMessage = CONSTANTS.ERROR.generic_error;
+    //     }
+    //     this.snackbarService.openSnackbar(this.responseMessage, 'Close', {
+    //       duration: 5000,
+    //     });
+    //   }
+    // })
   }
 
   setQuantity(value: any) {
@@ -150,9 +195,9 @@ export class ManageOrderComponent implements OnInit {
 
   add() {
     let formData = this.manageOrderForm.value;
-    let productName = this.dataSource.find((data: { id: number }) => data.id === formData.product.id);
+    let productExist = this.dataSource.find((data: { id: number }) => data.id === formData.product.id);
 
-    if (productName === undefined) {
+    if (productExist === undefined) {
       this.totalAmount = this.totalAmount + formData.total;
       this.dataSource.push({
         id: formData.product.id,
@@ -163,14 +208,10 @@ export class ManageOrderComponent implements OnInit {
         total: formData.total
       });
       this.dataSource = [...this.dataSource];
-      this.snackbar.open(CONSTANTS.MESSAGE.product_added, 'Done', {
-        duration: 5000
-      });
+      this.snackbarService.openSnackbar(CONSTANTS.MESSAGE.product_added);
     }
     else {
-      this.snackbar.open(CONSTANTS.ERROR.product_exists, 'Close', {
-        duration: 5000,
-      })
+      this.snackbarService.openSnackbar(CONSTANTS.ERROR.product_exists)
     }
   }
 
@@ -188,41 +229,48 @@ export class ManageOrderComponent implements OnInit {
       email: formData.email,
       contactNumber: formData.contactNumber,
       paymentMethod: formData.paymentMethod,
-      totalAmount: this.totalAmount,
+      total: this.totalAmount,
       productDetails: JSON.stringify(this.dataSource)
     }
-    this.billService.generateReport(data).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        this.downloadFile(response);
+    console.log(data)
+    this.store.dispatch(BillActions.GenerateBill({ billData: data }))
+
+    this.store.select(CafeFeature.selectBillResponse).subscribe(value => {
+      if (value !== null) {
+        console.log(value);
+        this.downloadFile(value);
         this.manageOrderForm.reset();
         this.dataSource = [];
         this.totalAmount = 0;
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-        if (error.error.message) {
-          this.responseMessage = error.error.message;
-        }
-        else if (error.error.error) {
-          this.responseMessage = error.error.error;
-        }
-        else {
-          this.responseMessage = CONSTANTS.ERROR.generic_error;
-        }
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000,
-        });
       }
     })
+    // this.billService.generateReport(data).subscribe({
+    //   next: (response: any) => {
+    //     console.log(response);
+    //     this.downloadFile(response);
+    //     this.manageOrderForm.reset();
+    //     this.dataSource = [];
+    //     this.totalAmount = 0;
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     console.log(error);
+    //     if (error.error.message) {
+    //       this.responseMessage = error.error.message;
+    //     }
+    //     else if (error.error.error) {
+    //       this.responseMessage = error.error.error;
+    //     }
+    //     else {
+    //       this.responseMessage = CONSTANTS.ERROR.generic_error;
+    //     }
+    //     this.snackbarService.openSnackbar(this.responseMessage, 'Close', {
+    //       duration: 5000,
+    //     });
+    //   }
+    // })
   }
 
   downloadFile(data: any) {
-    // this.billService.getPDF(data).subscribe({
-    //   next: (response: any) => {
-    //     saveAs(response, filename + '.pdf');
-    //   }
-    // });
     let downloadURL = window.URL.createObjectURL(data);
     saveAs(downloadURL);
   }

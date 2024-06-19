@@ -6,9 +6,9 @@ import { inject } from '@angular/core';
 import { UserService } from '../services/user.service';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
-  let token: string = localStorage.getItem(CONSTANTS.AUTH_TOKEN)!;
   const router = inject(Router);
   const userService = inject(UserService);
+  let token: string = userService.getLoginToken()!;
 
   if (token) {
     req = req.clone({

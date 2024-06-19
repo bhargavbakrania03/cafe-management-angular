@@ -10,6 +10,16 @@ export interface Login {
     password: string;
 }
 
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    contactNumber: string;
+    password: string;
+    status: boolean;
+    role: string;
+}
+
 export interface ForgotPassword {
     email: string;
 }

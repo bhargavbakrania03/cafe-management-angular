@@ -5,14 +5,17 @@ import { CONSTANTS } from '../../utils/constants';
 import { jwtDecode } from 'jwt-decode';
 import { TokenPayload } from '../models/auth.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../pages/auth/store/auth.actions';
 
-export const AuthGuard: CanActivateFn = (route, state) => {
+export const AuthGuard: CanActivateFn = (route, _state) => {
   const userService = inject(UserService);
   const snackbar = inject(MatSnackBar);
+  const store = inject(Store);
 
   if (userService.getLoginToken()) {
     let expectedRoleList: any = route.data;
-    let token: string = localStorage.getItem(CONSTANTS.AUTH_TOKEN)!;
+    let token: string = userService.getLoginToken()!;
     let tokenPayload: TokenPayload, checkRole: boolean = false;
 
     expectedRoleList = expectedRoleList['expectedRole'];
@@ -38,13 +41,11 @@ export const AuthGuard: CanActivateFn = (route, state) => {
       return false;
     }
     catch (error) {
+      store.dispatch(AuthActions.Logout())
       userService.logout();
     }
   }
-  else {
-    userService.logout();
-    return false;
-  }
-  userService.navigate(CONSTANTS.ROUTES.login);
+  store.dispatch(AuthActions.Logout())
+  userService.logout();
   return false;
 };

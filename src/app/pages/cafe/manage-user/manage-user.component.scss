@@ -9,8 +9,8 @@ table {
     // margin-bottom: 20px;
 }
 
-th, td {
-    text-align: center;
+td {
+    text-align: left;
 }
 
 hr {
@@ -28,7 +28,7 @@ mat-card span b {
 .action-link {
     display: flex;
     align-items: center;
-    justify-content: center ;
+    justify-content: center;
 }
 
 .center-mat {
@@ -36,6 +36,10 @@ mat-card span b {
     padding-bottom: 0;
 }
 
-.center-mat mat-form-field{
-    width: 50%;
+.center-mat mat-form-field {
+    width: 100%;
+}
+
+.action_th {
+    text-align: center;
 }

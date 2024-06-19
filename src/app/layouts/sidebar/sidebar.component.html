@@ -2,7 +2,7 @@
     <mat-drawer #sidenav class="sidebar-list" mode="side" opened>
         <mat-nav-list>
             @for (item of menuItems.getMenuItem(); track $index) {
-            <a [routerLink]="['/cafe', item.state]" *ngIf="item.role==='' || item.role === tokenPayload.role">
+            <a [routerLink]="[item.state]" *ngIf="item.role==='' || item.role === tokenPayload.role">
                 <mat-list-item routerLinkActive="selected">
                     <div class="sidebar-item">
                         <mat-icon>{{item.icon}}</mat-icon>

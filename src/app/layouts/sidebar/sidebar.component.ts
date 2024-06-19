@@ -6,6 +6,9 @@ import { MenuItems } from '../../shared/menu-items';
 import { CONSTANTS } from '../../utils/constants';
 import { jwtDecode } from 'jwt-decode';
 import { UserService } from '../../core/services/user.service';
+import { Store } from '@ngrx/store';
+import { AuthFeature } from '../../pages/auth/store/auth.reducer';
+import * as AuthActions from '../../pages/auth/store/auth.actions';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,20 +18,24 @@ import { UserService } from '../../core/services/user.service';
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
-  token: string = localStorage.getItem(CONSTANTS.AUTH_TOKEN)!;
+  token: string = this.userService.getLoginToken()!;
   tokenPayload: any;
   isLoggedIn = false;
   @ViewChild('sidenav') sidenav: any;
 
-  constructor(public menuItems: MenuItems, private userService: UserService,) {
+  constructor(public menuItems: MenuItems, private userService: UserService, private store: Store) {
 
-    if (localStorage.getItem(CONSTANTS.AUTH_TOKEN)) {
+    this.store.select(AuthFeature.selectIsAuthenticated).subscribe(value => {
+      this.isLoggedIn = value;
+    })
+
+    if (userService.getLoginToken()) {
       this.isLoggedIn = true;
     }
 
-    this.userService.isLogged.subscribe(value => {
-      this.isLoggedIn = value;
-    })
+    // this.userService.isLogged.subscribe(value => {
+    //   this.isLoggedIn = value;
+    // })
 
     if (this.isLoggedIn) {
       this.tokenPayload = jwtDecode(this.token);

@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../../core/services/product.service';
 import { MaterialModule } from '../../../shared/modules/material.module';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { HttpErrorResponse } from '@angular/common/http';
-import { CONSTANTS } from '../../../utils/constants';
 import { ProductDialogComponent } from '../../../layouts/dialog/product-dialog/product-dialog.component';
 import { ConfirmationDialogComponent } from '../../../layouts/dialog/confirmation-dialog/confirmation-dialog.component';
+import { Store } from '@ngrx/store';
+import * as ProductActions from "../store/actions/product.actions";
+import { CafeFeature } from "../store/cafe.reducer";
+import { SnackbarService } from '../../../core/services/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-product',
@@ -21,7 +23,7 @@ export class ManageProductComponent implements OnInit {
   dataSource: any;
   responseMessage: string = '';
 
-  constructor(private productService: ProductService, private dialog: MatDialog, private snackbar: MatSnackBar
+  constructor(private productService: ProductService, private dialog: MatDialog, private snackbarService: SnackbarService, private store: Store, private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -29,26 +31,31 @@ export class ManageProductComponent implements OnInit {
   }
 
   tableData() {
-    this.productService.getProducts().subscribe({
-      next: (response: any) => {
-        this.dataSource = new MatTableDataSource(response);
-        console.log(response)
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.error.message) {
-          this.responseMessage = error.error.message;
-        }
-        else if (error.error.error) {
-          this.responseMessage = error.error.error;
-        }
-        else {
-          this.responseMessage = CONSTANTS.ERROR.generic_error;
-        }
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000,
-        })
-      }
+    this.store.select(CafeFeature.selectProducts).subscribe(value => {
+      console.log('emmited')
+      this.dataSource = new MatTableDataSource(value);
     })
+
+    // this.productService.getProducts().subscribe({
+    //   next: (response: any) => {
+    //     this.dataSource = new MatTableDataSource(response);
+    //     console.log(response)
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     if (error.error.message) {
+    //       this.responseMessage = error.error.message;
+    //     }
+    //     else if (error.error.error) {
+    //       this.responseMessage = error.error.error;
+    //     }
+    //     else {
+    //       this.responseMessage = CONSTANTS.ERROR.generic_error;
+    //     }
+    //     this.snackbar.open(this.responseMessage, 'Close', {
+    //       duration: 5000,
+    //     })
+    //   }
+    // })
   }
 
   applyFilter(event: Event) {
@@ -63,11 +70,20 @@ export class ManageProductComponent implements OnInit {
     }
     dialogConfig.width = '850px';
     const dialogRef = this.dialog.open(ProductDialogComponent, dialogConfig);
-    dialogRef.componentInstance.onAddProduct.subscribe(
-      (response) => {
-        this.tableData();
-      }
-    )
+
+    this.router.events.subscribe(() => {
+      dialogRef.close();
+    })
+
+    this.productService.onAddProduct.subscribe(value => {
+      dialogRef.close();
+      // this.tableData();
+    })
+    // dialogRef.componentInstance.onAddProduct.subscribe(
+    //   (response) => {
+    //     this.tableData();
+    //   }
+    // )
   }
 
   handleEditAction(data: any) {
@@ -78,11 +94,20 @@ export class ManageProductComponent implements OnInit {
     }
     dialogConfig.width = '850px';
     const dialogRef = this.dialog.open(ProductDialogComponent, dialogConfig);
-    dialogRef.componentInstance.onEditProduct.subscribe(
-      (response) => {
-        this.tableData();
-      }
-    )
+
+    this.router.events.subscribe(() => {
+      dialogRef.close();
+    })
+
+    this.productService.onEditProduct.subscribe(value => {
+      dialogRef.close();
+      // this.tableData();
+    })
+    // dialogRef.componentInstance.onEditProduct.subscribe(
+    //   (response) => {
+    //     this.tableData();
+    //   }
+    // )
   }
 
   handleDeleteAction(data: any) {
@@ -97,56 +122,65 @@ export class ManageProductComponent implements OnInit {
         dialogRef.close();
       }
     )
-  }
 
-  deleteProduct(id: any) {
-    this.productService.deleteProduct(id).subscribe({
-      next: (response: any) => {
-        this.tableData();
-        this.responseMessage = response.message;
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000
-        })
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.error.error) {
-          this.responseMessage = error.error.error;
-        }
-        else {
-          this.responseMessage = CONSTANTS.ERROR.generic_error;
-        }
-
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000
-        })
-      }
+    this.router.events.subscribe(() => {
+      dialogRef.close();
     })
   }
 
-  onChange(status: any, id: any) {
-    const data = {
-      status: status.toString(),
-      id: id
-    }
-    this.productService.updateProduct(data).subscribe({
-      next: (response: any) => {
-        this.responseMessage = response.message;
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000
-        })
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.error.error) {
-          this.responseMessage = error.error.error;
-        }
-        else {
-          this.responseMessage = CONSTANTS.ERROR.generic_error;
-        }
+  deleteProduct(id: any) {
 
-        this.snackbar.open(this.responseMessage, 'Close', {
-          duration: 5000
-        })
-      }
-    });
+    this.store.dispatch(ProductActions.DeleteProduct({ id }));
+
+    // this.productService.deleteProduct(id).subscribe({
+    //   next: (response: any) => {
+    //     this.tableData();
+    //     this.responseMessage = response.message;
+    //     this.snackbar.open(this.responseMessage, 'Close', {
+    //       duration: 5000
+    //     })
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     if (error.error.error) {
+    //       this.responseMessage = error.error.error;
+    //     }
+    //     else {
+    //       this.responseMessage = CONSTANTS.ERROR.generic_error;
+    //     }
+
+    //     this.snackbar.open(this.responseMessage, 'Close', {
+    //       duration: 5000
+    //     })
+    //   }
+    // })
+  }
+
+  onChange(id: number) {
+    const data = {
+      id: id,
+    }
+
+    this.store.dispatch(ProductActions.ChangeProductStatus(data));
+
+    // this.productService.updateProduct(data).subscribe({
+    //   next: (response: any) => {
+    //     this.responseMessage = response.message;
+    //     this.snackbar.open(this.responseMessage, 'Close', {
+    //       duration: 5000
+    //     })
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     if (error.error.error) {
+    //       this.responseMessage = error.error.error;
+    //     }
+    //     else {
+    //       this.responseMessage = CONSTANTS.ERROR.generic_error;
+    //     }
+
+    //     this.snackbar.open(this.responseMessage, 'Close', {
+    //       duration: 5000
+    //     })
+    //   }
+    // });
   }
 }

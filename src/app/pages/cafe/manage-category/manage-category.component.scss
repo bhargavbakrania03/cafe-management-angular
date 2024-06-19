@@ -17,7 +17,7 @@ mat-form-field{
 }
 
 .center-mat mat-form-field{
-    width: 50%;
+    width: 100%;
 }
 
 .manage-category {
@@ -40,12 +40,16 @@ hr {
     padding: 20px;
 }
 
-.action-link {
-    display: flex;
-    align-items: center;
-    justify-content: center ;
-}
+// .action-link {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center ;
+// }
 
 th, td {
-    text-align: center;
+    text-align: left;
 }
+
+// .action_th {
+//     text-align: center;
+// }

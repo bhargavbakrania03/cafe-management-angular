@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CONSTANTS } from '../../utils/constants';
 import { Observable } from 'rxjs';
+import { BillResponse } from '../models/response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,16 +17,16 @@ export class BillService {
     return this.http.post(this.apiUrl + CONSTANTS.API_URL.BILL.generate_report, data, { headers: CONSTANTS.HEADERS.content_json, responseType: 'blob' })
   }
 
-  getPDF(data: any): Observable<Blob> {
+  getPDF(data: any) {
     return this.http.post(this.apiUrl + CONSTANTS.API_URL.BILL.get_pdf + data.uuid, data, { responseType: 'blob' })
   }
 
   getBills() {
-    return this.http.get(this.apiUrl + CONSTANTS.API_URL.BILL.get_bills)
+    return this.http.get<BillResponse[]>(this.apiUrl + CONSTANTS.API_URL.BILL.get_bills)
   }
 
   delete(id: any) {
-    return this.http.delete(this.apiUrl + CONSTANTS.API_URL.BILL.delete_bill + id, {
+    return this.http.delete<{message: string}>(this.apiUrl + CONSTANTS.API_URL.BILL.delete_bill + id, {
       headers: CONSTANTS.HEADERS.content_json
     })
   }

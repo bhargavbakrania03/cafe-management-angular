@@ -18,7 +18,7 @@
                 <td mat-cell *matCellDef="let element">{{element.category}}</td>
             </ng-container>
             <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef>Action</th>
+                <th mat-header-cell class="action_th" *matHeaderCellDef>Action</th>
                 <td mat-cell *matCellDef="let element">
                     <div class="action-link">
                         <button mat-icon-button color="primary" matTooltip="Edit" (click)="handleEditAction(element)">

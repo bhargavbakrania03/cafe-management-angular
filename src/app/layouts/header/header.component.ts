@@ -6,6 +6,9 @@ import { CONSTANTS } from '../../utils/constants';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../dialog/confirmation-dialog/confirmation-dialog.component';
 import { ChangePasswordComponent } from '../dialog/change-password/change-password.component';
+import { Store } from '@ngrx/store';
+import { AuthFeature } from '../../pages/auth/store/auth.reducer';
+import * as AuthActions from '../../pages/auth/store/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -17,14 +20,18 @@ import { ChangePasswordComponent } from '../dialog/change-password/change-passwo
 export class HeaderComponent {
   isLoggedIn = false;
 
-  constructor(private userService: UserService, private dialog: MatDialog) {
-    if (localStorage.getItem(CONSTANTS.AUTH_TOKEN)) {
+  constructor(private userService: UserService, private dialog: MatDialog, private store: Store) {
+    this.store.select(AuthFeature.selectIsAuthenticated).subscribe(value => {
+      this.isLoggedIn = value;
+    })
+
+    if (userService.getLoginToken()) {
       this.isLoggedIn = true;
     }
 
-    this.userService.isLogged.subscribe(value => {
-      this.isLoggedIn = value;
-    })
+    // this.userService.isLogged.subscribe(value => {
+    //   this.isLoggedIn = value;
+    // })
   }
 
   userLogout() {
@@ -35,7 +42,8 @@ export class HeaderComponent {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
     const sub = dialogRef.componentInstance.onEmitStatusChange.subscribe((user) => {
       dialogRef.close();
-      this.userService.logout();
+      this.store.dispatch(AuthActions.Logout())
+      // this.userService.logout();
     })
   }
 

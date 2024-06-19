@@ -4,7 +4,7 @@ mat-card {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding:  0 25px;
+    padding: 0 25px;
 }
 
 .center-mat {
@@ -12,12 +12,12 @@ mat-card {
     padding-bottom: 0;
 }
 
-mat-form-field{
+mat-form-field {
     padding-top: 15px;
 }
 
-.center-mat mat-form-field{
-    width: 50%;
+.center-mat mat-form-field {
+    width: 100%;
 }
 
 .manage-product {
@@ -43,9 +43,13 @@ hr {
 .action-link {
     display: flex;
     align-items: center;
-    justify-content: center ;
+    justify-content: center;
 }
 
-th, td {
+td {
+    text-align: left;
+}
+
+.action_th {
     text-align: center;
 }

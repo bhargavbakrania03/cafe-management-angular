@@ -4,8 +4,8 @@ export const CONSTANTS = {
     REGEX: {
         name_regex: '[a-zA-Z ]*',
         email_regex: '[a-zA-Z0-9_.-]+@[A-Za-z0-0-9_.-]+\.[a-z]{2,3}',
-        contact_number_regex: '^[0-9]{10,10}$',
-        password_regex: '[a-zA-Z0-9!@#$_]{8,20}',
+        contact_number_regex: '[0-9]{10,10}',
+        password_regex: '[a-zA-Z0-9!@#$_]{3,20}',
     },
     AUTH_TOKEN: 'CURRENT_TOKEN',
     API_URL: {
@@ -24,6 +24,7 @@ export const CONSTANTS = {
         },
         CATEGORY: {
             get_category: 'category/allcategory/',
+            get_category_by_id: 'category/',
             add_category: 'category/add/',
             update_category: 'category/update/',
         },
@@ -32,7 +33,7 @@ export const CONSTANTS = {
             get_product: 'product/allproduct',
             update_product: 'product/update/',
             delete_product: 'product/delete/',
-            update_status: 'product/verify/',
+            update_status: 'product/changeStatus/',
             get_product_by_id: 'product/',
         },
         BILL: {
